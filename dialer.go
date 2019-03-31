@@ -1,10 +1,10 @@
 package main
 
-//dxkdkd
-
-import "net"
-import "io/ioutil"
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"net"
+)
 
 func main() {
 	conn, err := net.Dial("tcp", ":5000")
