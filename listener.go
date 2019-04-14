@@ -4,38 +4,30 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"os"
+
 )
 
+	type Person struct {
+		Name  string
+		Email string
+	}
+
+
 func handler(c net.Conn) {
-	c.Write([]byte("ok"))
+	var n = &Person{Name: "Markus",
+		Email: "m.sveggen@gmail.com",
+	}
+	b, err := json.Marshal(n)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	c.Write([]byte(b))
 	c.Close()
 
 }
 
 func main() {
 
-	////////////////////////
-	type Person struct {
-		Name  string
-		Email string
-	}
-
-	nav := Person{Name: "Markus",
-		Email: "m.sveggen@gmail.com",
-	}
-
-	b, err := json.Marshal(nav)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	os.Stdout.Write(b)
-
-	//net.Conn.Write(b)
-
-	//net.Conn.Close()
-
-	//////////////////////////////
 
 	fmt.Println("Starter server...")
 	l, err := net.Listen("tcp", ":5000")
