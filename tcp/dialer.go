@@ -1,14 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"net"
+	"os"
 )
 
 
 func main() {
-	conn, err := net.Dial("tcp", ":5000")
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Println("Enter port:")
+	text, _ :=reader.ReadString('\n')
+	fmt.Println(text)
+
+	conn, err := net.Dial("tcp", ":5000") //:5000
 	if err != nil {
 		panic(err)
 	}

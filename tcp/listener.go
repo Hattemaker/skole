@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-
 )
 
 	type Person struct {
@@ -23,12 +22,9 @@ func handler(c net.Conn) {
 	}
 	c.Write([]byte(b))
 	c.Close()
-
 }
 
 func main() {
-
-
 	fmt.Println("Starter server...")
 	l, err := net.Listen("tcp", ":5000")
 	if err != nil {
@@ -41,7 +37,5 @@ func main() {
 			continue
 		}
 		go handler(c)
-
 	}
-
 }
