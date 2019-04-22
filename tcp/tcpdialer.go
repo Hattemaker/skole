@@ -45,7 +45,7 @@ func main () {
 
 	defer conn.Close()
 
-	// Leser data fra server (JSON-struktur) og dekoder den.
+	// Leser data fra server (JSON-struktur) og dekoder den. bs = bytes
 	bs, _ := ioutil.ReadAll(conn)
 	if err := json.Unmarshal(bs, &person1); err != nil {
 		panic(err)

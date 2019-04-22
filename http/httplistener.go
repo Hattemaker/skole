@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"net/http"
 )
@@ -17,6 +16,7 @@ func handler (w http.ResponseWriter, r *http.Request) {
 	var n1 = &Person{Name: "Markus",
 		Email: "m.sveggen@gmail.com",}
 
+	// js = json
 	js, err := json.Marshal(n1)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -29,11 +29,8 @@ func handler (w http.ResponseWriter, r *http.Request) {
 
 // Starter en HTTP-server.
 func main () {
-	httpAddr1 := flag.String("http", "foo", "HTTP-address")
-	flag.Parse()
-
 	http.HandleFunc("/", handler)
-	err := http.ListenAndServe(*httpAddr1, nil) // "http://localhost:5000"
+	err := http.ListenAndServe("localhost:5000", nil) // "localhost:5000" må endres til "ip:port".
 	if err != nil {
 		panic(err)
 	}

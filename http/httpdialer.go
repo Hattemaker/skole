@@ -35,7 +35,7 @@ func writeToFile () {
 }
 
 //Kobler seg opp mot en server og dekoder JSON-strukturen som blir hentet fra serveren.
-func main () 		{
+func main () {
 	httpAddr2  := flag.String("http", "foo", "HTTP address")
 	flag.Parse()
 
