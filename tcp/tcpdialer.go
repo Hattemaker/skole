@@ -3,9 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net"
 	"os"
 )
@@ -17,23 +15,25 @@ type Person1 struct {
 
 var person1 Person1
 
+// Skriver JSON-strukturen til en txt. fil. Om filen allerede inneholder tekst, blir ny data lagt til på neste linje.
 func WriteToFile () {
 	info := "\nNavn: " + person1.Name + " - Epost: " + person1.Email
 
-	file, err := os.OpenFile("tcp.txt", os.O_WRONLY|os.O_APPEND, 0644) // Åpner filen som write-only
-	// og tilføyer filen data når man skriver til filen "tcp.txt".
+	file, err := os.OpenFile("tcp.txt", os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+
 	defer file.Close()
 
-	lenk, err := file.Write([]byte(info)) //skriver slicen med bytes til filen ("http.txt")
+	// Skriver slicen med bytes til "tcp.txt".
+	_, err = file.Write([]byte(info))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	fmt.Println(lenk)
 }
 
+// Kobler seg opp mot en server og dekoder JSON-strukturen som blir hentet fra serveren.
 func main () {
 	tcpAddr1 := flag.String("tcp", "foo", "a string")
 	flag.Parse()
@@ -42,13 +42,14 @@ func main () {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Dialer running.")
-	defer conn.Close() //Utsetter å lukke tilkoblingen med serveren.
 
-	bs, _ := ioutil.ReadAll(conn) //Leser
-	if err := json.Unmarshal(bs, &person1); err != nil { //bs er data lest fra servern i bytes, person1 er struct oppsett
+	defer conn.Close()
+
+	// Leser data fra server (JSON-struktur) og dekoder den.
+	bs, _ := ioutil.ReadAll(conn)
+	if err := json.Unmarshal(bs, &person1); err != nil {
 		panic(err)
 	}
-	fmt.Println(person1.Name, "-", person1.Email) //Printer json structuren i unmarshaled format.
+
 	WriteToFile()
 }

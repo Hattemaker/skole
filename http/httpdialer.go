@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 )
@@ -16,23 +15,26 @@ type Person1 struct {
 
 var person1 Person1
 
+//Skriver JSON-strukturen til en txt. fil. Om filen allerede inneholder tekst, blir ny data lagt til på neste linje.
 func writeToFile () {
-	info := "\nNavn: " + person1.Name + " - Epost: " + person1.Email //variabel med oppsett til fil
+	info := "\nNavn: " + person1.Name + " - Epost: " + person1.Email
 
-	file, err := os.OpenFile("http.txt", os.O_WRONLY|os.O_APPEND, 0644)// Åpner filen som write-only
-	// og tilføyer filen data når man skriver til filen "http.txt".
+	file, err := os.OpenFile("http.txt", os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+
 	defer file.Close()
 
-	_, err = file.Write([]byte(info)) //skriver slicen med bytes til filen ("http.txt")
+	// Skriver slicen med bytes til "http.txt".
+	_, err = file.Write([]byte(info))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 }
 
+//Kobler seg opp mot en server og dekoder JSON-strukturen som blir hentet fra serveren.
 func main () 		{
 	httpAddr2  := flag.String("http", "foo", "HTTP address")
 	flag.Parse()
@@ -41,11 +43,14 @@ func main () 		{
 	if err != nil {
 		panic(err)
 	}
-	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
 
-	if err := json.Unmarshal(body, &person1); err != nil { //bs er data lest fra servern i bytes, person1 er struct oppsett
+	defer resp.Body.Close()
+
+	//Leser data fra server (JSON-struktur) og dekoder den.
+	body, _ := ioutil.ReadAll(resp.Body)
+	if err := json.Unmarshal(body, &person1); err != nil {
 		panic(err)
 	}
+
 	writeToFile()
 }

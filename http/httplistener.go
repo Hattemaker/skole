@@ -12,6 +12,7 @@ type Person struct {
 	Email string
 }
 
+// Skriver en JSON-struktur til serveren.
 func handler (w http.ResponseWriter, r *http.Request) {
 	var n1 = &Person{Name: "Markus",
 		Email: "m.sveggen@gmail.com",}
@@ -26,15 +27,15 @@ func handler (w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Starter en HTTP-server.
 func main () {
-	httpAddr1 := flag.String("http", "foo", "HTTP-address") //flag for å velge http-adresse i
-	// terminalen.
+	httpAddr1 := flag.String("http", "foo", "HTTP-address")
 	flag.Parse()
 
 	http.HandleFunc("/", handler)
-	err := http.ListenAndServe(*httpAddr1, nil)
+	err := http.ListenAndServe(*httpAddr1, nil) // "http://localhost:5000"
 	if err != nil {
 		panic(err)
 	}
-	}
+}
 
