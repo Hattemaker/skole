@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
 )
@@ -11,14 +12,10 @@ type Person struct {
 	Email string
 }
 
-func main () {
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":5000", nil)
-	}
-
 func handler (w http.ResponseWriter, r *http.Request) {
 	var n1 = &Person{Name: "Markus",
 		Email: "m.sveggen@gmail.com",}
+
 	js, err := json.Marshal(n1)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -28,3 +25,16 @@ func handler (w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 
 }
+
+func main () {
+	httpAddr1 := flag.String("http", "foo", "HTTP-address") //flag for å velge http-adresse i
+	// terminalen.
+	flag.Parse()
+
+	http.HandleFunc("/", handler)
+	err := http.ListenAndServe(*httpAddr1, nil)
+	if err != nil {
+		panic(err)
+	}
+	}
+
