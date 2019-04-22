@@ -1,4 +1,4 @@
-package main
+package gospeak
 
 import (speech "github.com/go-speak")
 //example
